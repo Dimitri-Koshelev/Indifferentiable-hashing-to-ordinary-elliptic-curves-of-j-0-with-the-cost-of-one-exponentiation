@@ -1,6 +1,6 @@
 # Dmitrii Koshelev (the author of the code) was supported by Web3 Foundation (W3F)
 # Throughout the code the notation is consistent with author's article 
-# "Indifferentiable hashing to ordinary elliptic Fq-curves of j = 0 with the cost of one exponentiation in Fq"
+# "[1] Indifferentiable hashing to ordinary elliptic Fq-curves of j = 0 with the cost of one exponentiation in Fq"
 
 import hashlib
 import random
@@ -87,13 +87,24 @@ def hPrime(num0,num1,num2,den, t1,t2):
 	
 
 # rational map Fq^2 -> T(Fq)
+# where T is a Calabi-Yau threefold defined by
+# T := E_b x E_b' x E_b''/[w]^3
+# in which 
+# E_b: y^2 = x^3 + b and E_b', E_b'' are its twists
+# w is a primitive 3rd root of unity and [w]^3 signifies its diagonal action.
+# we assume that b is a cubic non-residue in F_q
 def phi(t1,t2):
+        #[1] Lemma 1 states that T can be defined on AA^5(y_0,y_1,y_2,t_1,t_2) with        
+        # y_1^2 - b = b*(y_0^2 - b)*t_1^3
+        # y_2^2 - b = b^2*(y_0^2 - b)*t_2^3
 	s1 = t1^3
 	s2 = t2^3
+        # T/Fq(s_1, s_2) is an elliptic curve
+
 	s1s1 = s1^2
-	s2s2 = s2^2
-	global s1s2
-	s1s2 = s1*s2
+	s2s2 = s22^
+	global s1s2 # this is obviously shouldn't be defined like this. Perhaps it should be included  among the vector returned by the function.
+	s1s2 = s1*s2 #if s1*s2 = 0 then we are hashing to ??? see [1] lemma ??? and [1] end of section 2
 	
 	b2 = b^2
 	b3 = b*b2
@@ -103,7 +114,9 @@ def phi(t1,t2):
 	a10 = 2*b*s1
 	a02 = b4*s2s2
 	a01 = 2*b2*s2
-	
+
+        # we set y_i = num_i/den
+        # see [1] Theorem
 	num0 = sb*(a20 - a11 + a10 + a02 + a01 - 3)
 	num1 = sb*(-3*a20 + a11 + a10 + a02 - a01 + 1)
 	num2 = sb*(a20 + a11 - a10 - 3*a02 + a01 + 1)
